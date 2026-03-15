@@ -1,0 +1,50 @@
+{
+  "file": "/server/velocity.toml",
+  "ops": [
+    {
+      "$set": {
+        "path": "$.online-mode",
+        "value": false
+      }
+    },
+    {
+      "$set": {
+        "path": "$.player-info-forwarding-mode",
+        "value": "modern"
+      }
+    },
+    {
+      "$put": {
+        "path": "$.servers",
+        "key": "lobby",
+        "value": "smp:25565"
+      }
+    },
+    {
+      "$put": {
+        "path": "$.servers",
+        "key": "limbo",
+        "value": "limbo:25565"
+      }
+    },
+    {
+      "$set": {
+        "path": "$.servers['try']",
+        "value": ["lobby", "limbo"]
+      }
+    },
+    {
+      "$put": {
+        "path": "$['forced-hosts']",
+        "key": "localhost",
+        "value": ["lobby"]
+      }
+    },
+    {
+      "$set": {
+        "path": "$.advanced['tcp-fast-open']",
+        "value": true
+      }
+    }
+  ]
+}

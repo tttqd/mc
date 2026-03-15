@@ -1,0 +1,53 @@
+x-common: &common
+  env_file: .env
+  restart: unless-stopped
+
+services:
+  smp:
+    <<: *common
+    image: itzg/minecraft-server:latest
+    environment:
+      PATCH_DEFINITIONS: /patches
+      TYPE: "PAPER"
+      ONLINE_MODE: "FALSE"
+      ENFORCE_SECURE_PROFILE: "FALSE"
+      NETWORK_COMPRESSION_THRESHOLD: "-1"
+      INIT_MEMORY: "1G"
+      MAX_MEMORY: "2G"
+      USE_AIKAR_FLAGS: "TRUE"
+    volumes:
+      - ./smp/patches:/patches:ro
+      # - ./mnt/smp:/data
+
+  limbo:
+    <<: *common
+    image: itzg/minecraft-server:latest
+    environment:
+      PATCH_DEFINITIONS: /patches
+      TYPE: "NANOLIMBO"
+      MEMORY: "256M"
+    volumes:
+      - ./limbo/patches:/patches:ro
+      # - ./mnt/limbo:/data
+
+  proxy:
+    <<: *common
+    image: itzg/mc-proxy:latest
+    entrypoint: ["/bin/sh", "-c", "mkdir -p /server && printf '%s' \"$$CFG_FORWARDING_SECRET\" > /server/forwarding.secret && exec /__cacert_entrypoint.sh /usr/bin/run-bungeecord.sh"]
+    environment:
+      PATCH_DEFINITIONS: /patches
+      TYPE: "VELOCITY"
+      INIT_MEMORY: "256M"
+      MAX_MEMORY: "512M"
+    volumes:
+      - ./proxy/patches:/patches:ro
+      - ./proxy/plugins:/plugins:ro
+      # - ./mnt/proxy:/server
+    ports:
+      - "${PROXY_PORT}:25577"
+
+  watchtower:
+    image: nickfedor/watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
