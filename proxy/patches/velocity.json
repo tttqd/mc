@@ -14,40 +14,21 @@
       }
     },
     {
-      "$put": {
+      "$set": {
         "path": "$.servers",
-        "key": "lobby",
-        "value": "smp:25565"
-      }
-    },
-    {
-      "$put": {
-        "path": "$.servers",
-        "key": "limbo",
-        "value": "limbo:25565"
-      }
-    },
-    {
-      "$remove": {
-        "path": "$.servers.factions"
-      }
-    },
-    {
-      "$remove": {
-        "path": "$.servers.minigames"
+        "value": {
+          "lobby": "smp:25565",
+          "limbo": "limbo:25565",
+          "try": ["lobby", "limbo"]
+        }
       }
     },
     {
       "$set": {
-        "path": "$.servers['try']",
-        "value": ["lobby", "limbo"]
-      }
-    },
-    {
-      "$put": {
         "path": "$['forced-hosts']",
-        "key": "localhost",
-        "value": ["lobby"]
+        "value": {
+          "localhost": ["lobby"]
+        }
       }
     },
     {
