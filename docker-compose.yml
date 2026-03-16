@@ -3,20 +3,36 @@ x-common: &common
   restart: unless-stopped
 
 services:
-  smp:
+  # smp-paper:
+  #   <<: *common
+  #   image: itzg/minecraft-server:latest
+  #   environment:
+  #     PATCH_DEFINITIONS: /patches
+  #     TYPE: "PAPER"
+  #     ONLINE_MODE: "FALSE"
+  #     ENFORCE_SECURE_PROFILE: "FALSE"
+  #     NETWORK_COMPRESSION_THRESHOLD: "-1"
+  #     INIT_MEMORY: "1G"
+  #     MAX_MEMORY: "2G"
+  #     USE_AIKAR_FLAGS: "TRUE"
+  #   volumes:
+  #     - ./smp/patches:/patches:ro
+  #     # - ./mnt/smp:/data
+
+  smp-forge:
     <<: *common
     image: itzg/minecraft-server:latest
     environment:
-      PATCH_DEFINITIONS: /patches
-      TYPE: "PAPER"
+      TYPE: "FORGE"
+      VERSION: "1.20.1"
       ONLINE_MODE: "FALSE"
       ENFORCE_SECURE_PROFILE: "FALSE"
       NETWORK_COMPRESSION_THRESHOLD: "-1"
       INIT_MEMORY: "1G"
-      MAX_MEMORY: "2G"
+      MAX_MEMORY: "4G"
       USE_AIKAR_FLAGS: "TRUE"
+      PACKWIZ_URL: "https://tttqd.github.io/mc/modpack/pack.toml"
     volumes:
-      - ./smp/patches:/patches:ro
       # - ./mnt/smp:/data
 
   limbo:
