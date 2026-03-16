@@ -28,6 +28,16 @@
       }
     },
     {
+      "$remove": {
+        "path": "$.servers.factions"
+      }
+    },
+    {
+      "$remove": {
+        "path": "$.servers.minigames"
+      }
+    },
+    {
       "$set": {
         "path": "$.servers['try']",
         "value": ["lobby", "limbo"]
