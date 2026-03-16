@@ -3,7 +3,7 @@ x-common: &common
   restart: unless-stopped
 
 services:
-  # smp-paper:
+  # smp:
   #   <<: *common
   #   image: itzg/minecraft-server:latest
   #   environment:
@@ -19,32 +19,25 @@ services:
   #     - ./smp/patches:/patches:ro
   #     # - ./mnt/smp:/data
 
-  smp-forge:
+  smp:
     <<: *common
     image: itzg/minecraft-server:latest
     environment:
+      PATCH_DEFINITIONS: /patches
       TYPE: "FORGE"
       VERSION: "1.20.1"
       ONLINE_MODE: "FALSE"
       ENFORCE_SECURE_PROFILE: "FALSE"
       NETWORK_COMPRESSION_THRESHOLD: "-1"
-      INIT_MEMORY: "1G"
-      MAX_MEMORY: "4G"
       USE_AIKAR_FLAGS: "TRUE"
-      PACKWIZ_URL: "https://tttqd.github.io/mc/modpack/pack.toml"
+      SYNC_CHUNK_WRITES: "FALSE"
+      OPS: |-
+        TTQD
+      ALLOW_FLIGHT: "TRUE"
     volumes:
+      - ./smp/patches:/patches:ro
       - ./mnt/smp:/data
-
-  limbo:
-    <<: *common
-    image: itzg/minecraft-server:latest
-    environment:
-      PATCH_DEFINITIONS: /patches
-      TYPE: "NANOLIMBO"
-      MEMORY: "256M"
-    volumes:
-      - ./limbo/patches:/patches:ro
-      # - ./mnt/limbo:/data
+      - ./mods:/mods:ro
 
   proxy:
     <<: *common
@@ -53,12 +46,14 @@ services:
     environment:
       PATCH_DEFINITIONS: /patches
       TYPE: "VELOCITY"
-      INIT_MEMORY: "256M"
-      MAX_MEMORY: "512M"
+      PLUGINS: |-
+        https://github.com/SkinsRestorer/SkinsRestorer/releases/latest/download/SkinsRestorer.jar
+        https://github.com/TCPShield/RealIP/releases/download/2.8.1/TCPShield-2.8.1.jar
+        https://github.com/adde0109/Ambassador/releases/download/v1.4.5/Ambassador-Velocity-1.4.5-all.jar
+        https://hangarcdn.papermc.io/plugins/jmp/MiniMOTD/versions/2.2.2/VELOCITY/minimotd-velocity-2.2.2.jar
     volumes:
       - ./proxy/patches:/patches:ro
       - ./proxy/plugins:/plugins:ro
-      # - ./mnt/proxy:/server
     ports:
       - "${PROXY_PORT}:25577"
 
