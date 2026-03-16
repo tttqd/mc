@@ -3,6 +3,12 @@
   "ops": [
     {
       "$set": {
+        "path": "$.network-compression-threshold",
+        "value": -1
+      }
+    },
+    {
+      "$set": {
         "path": "$.online-mode",
         "value": false
       }
